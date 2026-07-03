@@ -1,0 +1,43 @@
+name: Build resume PDF
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "Nafiz_Imtiaz_Khan_Resume.pdf"
+  workflow_dispatch:
+
+concurrency:
+  group: build-resume
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: 01-main.tex
+          latexmk_use_xelatex: false
+
+      - name: Rename compiled PDF
+        run: mv -f 01-main.pdf Nafiz_Imtiaz_Khan_Resume.pdf
+
+      - name: Commit compiled PDF
+        id: commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: rebuild resume PDF [skip ci]"
+          file_pattern: Nafiz_Imtiaz_Khan_Resume.pdf
+
+      - name: Purge jsDelivr CDN cache
+        if: steps.commit.outputs.changes_detected == 'true'
+        run: |
+          curl -fsSL "https://purge.jsdelivr.net/gh/Nafiz43/resume@main/Nafiz_Imtiaz_Khan_Resume.pdf"
