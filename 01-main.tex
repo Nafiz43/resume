@@ -1,0 +1,769 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot, % set margins without considering header and footer
+    top=0.75 cm, % seperation between body and page edge from the top
+    bottom=0.75 cm, % seperation between body and page edge from the bottom
+    left=0.75 cm, % seperation between body and page edge from the left
+    right=0.75 cm, % seperation between body and page edge from the right
+    footskip=0.5 cm, % seperation between body and footer
+    % showframe % for debugging 
+]{geometry} % for adjusting page geometry
+\usepackage{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed width columns
+\usepackage{array} % tabularx requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 0, 0} % define primary color
+\usepackage{enumitem} % for customizing lists
+\usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math
+\usepackage[
+    pdftitle={Nafiz's Resume},
+    pdfauthor={Nafiz Imtiaz Khan},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=false
+]{hyperref} % for links, metadata and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjustwidth environment)
+\usepackage{paracol} % for two and three column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace} % for avoiding page brake right after the section title
+\usepackage{ragged2e}
+\usepackage{iftex} % check if engine is pdflatex, xetex or luatex
+% \usepackage[colorlinks=true,urlcolor=NavyBlue]{hyperref}
+
+% Ensure that generate pdf is machine readable/ATS parsable:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+\usepackage{charter}
+
+% Some settings:
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0.15cm} % set column seperation
+\pagenumbering{gobble} % no page numbering
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{
+    % left space:
+    -1pt
+}{
+    % top space:
+    0.3 cm
+}{
+    % bottom space:
+    0.2 cm
+} % section title spacing
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet points
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0 cm + 10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights
+
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights for bullet entries
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0 cm + 0.00001 cm
+    }{
+        0 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+} % new environment for one column entries
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for two column entries
+
+\newenvironment{threecolentry}[3][]{
+    \onecolentry
+    \def\thirdColumn{#3}
+    \setcolumnwidth{, \fill, 4.5 cm}
+    \begin{paracol}{3}
+    {\raggedright #2} \switchcolumn
+}{
+    \switchcolumn \raggedleft \thirdColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for three column entries
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+} % new environment for the header
+
+\newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
+  \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+    \put(
+        \LenToUnit{\paperwidth-2 cm-0 cm+0.05cm},
+        \LenToUnit{\paperheight-1.0 cm}
+    ){\vtop{{\null}\makebox[0pt][c]{
+        \small\color{gray}\textit{Last updated in September 2024}\hspace{\widthof{Last updated in September 2024}}
+    }}}%
+  }%
+}%
+
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+
+% new command for external links:
+
+
+
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+
+
+% \newcommand{\resumeSubheading}[4]{
+%   \vspace{-2pt}\item
+%     \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+%       \textbf{#1} & #2 \\
+%       \textit{\small#3} & \textit{\small #4} \\
+%     \end{tabular*}\vspace{-7pt}
+% }
+
+
+% \newcommand{\resumeSubheading}[4]{
+%   \vspace{-2pt}\item
+%     \begin{tabular*}{0.97\textwidth}[t]{l@{\hspace{5em}}r}
+%       \textbf{#1} & #2 \\
+%       \textit{\small#3} & \textit{\small #4} \\
+%     \end{tabular*}\vspace{-7pt}
+% }
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{\textwidth}[t]{@{\extracolsep{\fill}}l r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+
+
+\newcommand{\cvdoublecolumn}[2]{%
+  \cvitem[0.11mm]{}{%
+    \begin{minipage}[t]{\listdoubleitemcolumnwidth}#1\end{minipage}%
+    \hfill%
+    \begin{minipage}[t]{\listdoubleitemcolumnwidth}#2\end{minipage}%
+    }%
+}
+
+\newcommand{\cvreference}[7]{%
+    \textbf{#1}\newline% Name
+    \ifthenelse{\equal{#2}{}}{}{\addresssymbol~#2\newline}%
+    \ifthenelse{\equal{#3}{}}{}{#3\newline}%
+    \ifthenelse{\equal{#4}{}}{}{#4\newline}%
+    \ifthenelse{\equal{#5}{}}{}{#5\newline}%
+    \ifthenelse{\equal{#6}{}}{}{\emailsymbol~\texttt{#6}\newline}%
+    \ifthenelse{\equal{#7}{}}{}{\phonesymbol~#7}}
+    
+    
+    
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.10in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\justifying
+
+\begin{document}
+
+% https://drive.google.com/file/d/1HN2YaIrYDx78LKAqxLuT1QUqvHvkP8EU/view?usp=sharing
+
+\begin{center}
+    \textbf{\Huge \scshape Nafiz Imtiaz Khan} \\ \vspace{1pt}
+    Davis, California, United States\\
+     % \faMobile \small \hspace{0.00001mm} +88 017 95950319 $|$ 
+     \hspace{0.00001mm}
+     \href{mailto:nikhan@ucdavis.edu}{\underline{nikhan@ucdavis.edu}} $|$ (+1)530-220-8037 $|$ \hspace{0.00001mm} \href{https://nafiz43.github.io/portfolio/}{\underline{nafiz43.github.io/}}  $|$ \hspace{0.00001mm} \href{https://www.linkedin.com/in/nafiz43/}{\underline{linkedin.com/in/nafiz43/}}  $|$ \hspace{0.00001mm} \href{https://github.com/Nafiz43}{\underline{github.com/Nafiz43}} 
+
+
+\end{center}
+
+%-----------EDUCATION-----------
+
+\section{Career Objective}
+I am a PhD candidate in Computer Science at UC Davis, advised by Professor Vladimir Filkov. My research focuses on open-source software sustainability, health informatics, and applied data science. I specialize in fine-tuning deep neural networks, large language models, building agentic retrieval-augmented generation (RAG) systems, and developing task-specific AI/ML pipelines.
+
+
+
+
+\section{Education}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {University of California, Davis} {September 2023 - Present}
+      {PhD in Computer Science | MSc in Computer Science (2025)}
+      {California, United States}
+      
+    Master's degree conferred July 2025, CGPA: 3.91/4.00
+
+\resumeSubHeadingListEnd
+
+
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Programming Languages}{: Python, C/C++, Java, JavaScript, PL/SQL, Typescript, HTML / CSS, Bash} \\
+     \textbf{Frameworks/Libraries} {: PyTorch, Keras, Tensorflow, LangChain, Scikit-learn, Pandas, NumPy, Matplotlib, BeautifulSoup, Pyvis, Node, React} \\
+     \textbf{Tools/Platform}{: Ollama, Flask, Git, AWS Bedrock, Google Colab, GCP, Docker, Kubernetes, Grafana, Selenium, Tableau, Microsoft Azure, JIRA}\\
+     \textbf{Database}{: ChromaDB, FAISS, MongoDB, FireBase, MySQL, Oracle, SQLite} 
+    %  \textbf{Scripting \& Modeling}{: LATEX, HTML, JavaScript, Shell Script, UML} \\
+    %   \textbf{OS}{: Linux, Windows, Mac, Raspbian}\\
+    %  \textbf{Embedded Systems}{: AVR micro-controllers, Arduino, Raspberry Pi} \\
+    % \textbf{Simulator}{: Cisco packet Tracer, Proteus, Circuit Maker, AutoCAD} \\
+    %  \textbf{Others}{: Well presentation \& technical writing skill. Used to both individual \& team/group work.}
+    % }}
+
+ \end{itemize}
+
+
+
+
+%-----------EXPERIENCE-----------
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+  % \resumeSubheading
+  %   {Teaching Assistant}{April 2024 - Present}
+  %     {University of California, Davis} {California, United States}
+
+
+\resumeSubheading
+  {Human Frontier Collective Specialist – GenAI (Internship)}{Aug 2025 – Sep 2025}
+  {Scale AI, Inc.}{Remote – California, United States}
+  \resumeItemListStart
+    \resumeItem{Designed and critiqued complex, domain-specific problem sets to rigorously test cutting-edge generative AI models, identifying limitations and refining performance.}
+    \resumeItem{Collaborated with Scale researchers in interdisciplinary sessions to analyze model behavior, shape AI research directions, and explore experimental applications.}
+    % \resumeItem{Contributed to research outputs, technical reports, and thought leadership activities, while engaging in networking and mentorship with leading AI experts.}
+
+  \resumeItemListEnd
+
+  
+% \resumeSubheading
+%   {Founding Engineer and Project Manager}{June 2025 – Present}
+%   {Eltaes LLC}{Dixon, California, United States}
+%   \resumeItemListStart
+%     \resumeItem{Building ELTAES safety and emergency planning app with Flutter, LLM-powered RAG checklists, agentic AI for real-time monitoring, and privacy-compliant emergency contact workflows.}
+%   \resumeItemListEnd
+
+
+  \resumeSubheading
+      {Graduate Student Researcher}{September 2023 - Present}
+      {University of California, Davis} {California, United States}
+
+      \resumeItemListStart
+
+    \resumeItem{Developed \textbf{AngioVision} (\href{https://github.com/Nafiz43/AngioVision}{\underline{https://github.com/Nafiz43/AngioVision}}), an LLM-powered angiography report generation and validation pipeline; fine-tuned a framework integrating a \textbf{CLIP} alignment module, embedding, and decoder layers, achieving a \textbf{10\% F1 gain} over the prior SOTA, \textbf{Claude 4.6}.}
+
+
+    \resumeItem{Led the end-to-end development of RepoWise (\href{https://repowise.github.io/RepoWise-website/}{\underline{https://repowise.github.io/RepoWise-website/}}), a domain-aware RAG system for OSS governance analytics; demonstrated 84\% accuracy on factual queries and superior performance over general-purpose LLMs (GPT-4o, Claude 4.5 Sonnet) in both factual and non-factual repository tasks.}
+    
+    \resumeItem{Spearheaded the development of the \textbf{OSSPREY} (https://oss-prey.github.io/OSSPREY-Website/) tool to assess the health of open-source projects, as measured by real-time analytics generation with an average \texttt{latency} of 3.5s and 124MB \texttt{memory usage} per project, by integrating \textbf{Vue.js} (frontend), \textbf{TensorFlow} (deep learning), and \textbf{LangChain} \& \textbf{Ollama} (LLM inference pipeline design)}
+    
+    
+    \resumeItem{Developed \textbf{ReACT-GPT}(\href{https://github.com/Nafiz43/ReACT-GPT}{\underline{https://github.com/Nafiz43/ReACT-GPT}}), an \textbf{LLM}-and-\textbf{RAG}-powered framework for extracting actionable insights from scientific articles, achieving a 75\% \texttt{BERTScore}, by integrating \textbf{LangChain} (orchestration), \textbf{ChromaDB} (retrieval), and \textbf{Ollama} (lightweight LLM inference)} 
+
+    \resumeItem{Developed \textbf{EvidenceBot} (https://nafiz43.github.io/EvidenceBot/), a privacy-preserving \textbf{RAG} tool for querying and extracting insights from a diverse set of documents, built using \textbf{Streamlit} and powered by the \textbf{ReACT-GPT} framework}
+
+
+
+    \resumeItem{Developed \textbf{PCL-Fetcher} ([\href{https://nafiz43.github.io/PCL-Fetcher/}{\underline{https://nafiz43.github.io/PCL-Fetcher/}}), an LLM-powered pipeline that automates procedural case log documentation from radiology reports, achieving an 86\% \texttt{F1Score}—exceeding the crosswalk benchmark by over 13\%}
+
+    \resumeItem{Developed \textbf{MammoGen-RAG} ([\href{https://github.com/Nafiz43/MammoGen-RAG}{\underline{https://github.com/Nafiz43/MammoGen-RAG}}]), a multi-modal RAG pipeline that leverages Vision-Language Models (VLMs) to automate mammography report generation, achieving a 90\% \texttt{F1score} through integrated visual and textual reasoning}
+
+
+     
+    \resumeItem{Enhanced the performance of foundational language models in \textbf{LLM-as-Developers}(\href{https://github.com/zeerakb1/llm-developers-evaluation}{\underline{https://github.com/zeerakb1/llm-developers-evaluation}}) project by 10\% (\texttt{BERTScore}) on answering StackOverflow questions through strategic fine-tuning techniques (\textbf{PEFT} and \textbf{QLoRA})}
+    
+    \resumeItem{Developed and optimized \textbf{Transformer} and \textbf{LSTM-based} models for forecasting the sustainability of Open Source Software (OSS) projects (\href{https://github.com/OSS-PREY/OSSPREY-Pex-Forecaster}{\underline{https://github.com/OSS-PREY/OSSPREY-Pex-Forecaster}}), achieving an 8\% improvement in \texttt{F1Score} over SOTA}
+
+    % \resumeItem{Developed \href{https://nafiz43.github.io/ReACTive/feature.html\#section1}{{ReACTive}}, a visualization tool for ReACTs (Researched ACTionables) with \textbf{Pyvis} and \textbf{Bootstrap}}
+
+
+    % \resumeItem{Developed \href{https://nafiz43.github.io/ReACTive/feature.html\#section1}{{ReACTive}}, a visualization tool for ReACTs (Researched ACTionables) with \textbf{Pyvis} and \textbf{Bootstrap}}
+
+   
+
+
+    
+
+
+
+        
+        % \resumeItem{Authored four research}
+      \resumeItemListEnd
+
+
+
+
+   % \resumeSubheading   
+   %    {Lecturer}{March 2021 - August 2023}
+   %    {Military Institute of Science and Technology (MIST)} {Dhaka, Bangladesh} 
+   %   \resumeItemListStart
+   %      \resumeItem{Instructed six theory (\textbf{Data Structure}, \textbf{Software Engineering}, \textbf{Programming Language}, \textbf{Discrete Mathematics}, etc.) and eight sessional (\textbf{Integrated Design Project}, \textbf{System Design and Development}, etc) courses.}
+   %      % \resumeItem{Co-supervised \textbf{ten undergraduate} thesis teams, guiding students in their research and project development.}
+   %      \resumeItem{Collaborated in \textbf{25 AI/ML-based} research projects with students and faculty members.}
+   %      % \resumeItem{Served as \textbf{Chief Technical Officer} in different national events, including MIST \& AFMC Entrance Exam, and BEPZA Recruitment exam.}
+   %    \resumeItemListEnd
+
+    \resumeSubheading
+      {Software Engineer}{July 2022 -- August 2023}
+      {Center for Advanced Computing Research (CACR)}{Dhaka, Bangladesh}
+    \resumeItemListStart
+        \resumeItem{Developed the \textbf{AFMC Admission Test} Module, a software solution for the AFMC Entrance exam, utilizing \textbf{Node.js}, \textbf{Bootstrap}, and \textbf{MongoDB} to generate unique randomized questions for 30,000 candidates and automate the evaluation and ranking process}
+        \resumeItem{Spearheaded a team to develop \textbf{C-Archive} using \textbf{PHP}, \textbf{MySQL}, and \textbf{Bootstrap} to store ongoing events of the department [\href{https://github.com/nurshatfateh/CSE_Archive_New}{\underline{GITHUB}}]}
+        % \resumeItem{Developed a \textbf{Digital Plot Distribution} system in collaboration with \href{https://rajuk.gov.bd/}{{RAZUK}}, utilizing \textbf{Node.js}, \textbf{Bootstrap}, and \textbf{MongoDB}.}
+        % \resumeItem{Developed the \textbf{Website} of \href{https://nafiz43.github.io/ICT-Innovation-Fest/}{{MIST Inter-University ICT Innovation Fest}} with \textbf{HTML}, \textbf{CSS}. and \textbf{Bootstrap}.}
+
+   
+        
+        % https://nafiz43.github.io/ICT-Innovation-Fest/
+      \resumeItemListEnd
+      
+
+    % \resumeSubheading
+    %   {Software Engineer}{August 2019 -- February 2020}
+    %   {Guard Force Securities}{Dhaka, Bangladesh}
+    % \resumeItemListStart
+    %     \resumeItem{Designed and Implemented an \textbf{Employee Management System (EMS)} using \textbf{JavaFX} and \textbf{MySQL} database with multiple levels of security authorizations. which is used to maintain over 3500 employees.}
+
+      \resumeItemListEnd
+      
+    % \resumeSubheading
+    %   {Industrial Trainee}{December 2019 -- January 2021}
+    %   {Robi Axiata Limited} {Dhaka, Bangladesh}  
+    
+      
+    
+ \resumeSubHeadingListEnd
+
+
+
+%-----------Patents-----------
+\section{Patents}
+\begin{enumerate}
+
+    \item \textbf{Nafiz Imtiaz Khan}, Vladimir Filkov, "Systems And Methods For Artificial Intelligence-Driven Evidence-Based Action" (USPTO Filing ID: 32417/70825P) [\href{https://techtransfer.universityofcalifornia.edu/NCD/34373.html}{\underline{REF}}]
+
+\end{enumerate}
+
+
+%-----------Award \& Honors-----------
+
+% [\href{https://mist.ac.bd/department/cse/announcement/193/team_uvc_purge_conquered_international_medical_robotics_challege}{\underline{ref}}]
+
+% [\href{https://mist.ac.bd/department/cse/announcement/159/team_mist_blood_bank_champion_of_creative_app_contest_of_tri_robocup_organized_by_mist_robotics_club}{\underline{ref}}]
+
+% [\href{https://drive.google.com/file/d/1LT_F-guyWg8FymJV_-SkfvN2zSMIgKBa/view?usp=sharing}{\underline{ref}}]
+
+
+\section{Award \& Honors}
+    \resumeItemListStart
+         \resumeItem{\textbf{Champion} in the the \textbf{Medical Robotics Challenge for Contagious Diseases}, organized by \textbf{Imperial College London} [\href{https://mist.ac.bd/department/cse/announcement/193/team_uvc_purge_conquered_international_medical_robotics_challege}{\underline{REF}}]}
+         
+         
+         
+
+
+        \resumeItem{\textbf{Champion} in the Creative App Contest of the \textbf{Tri Robo Cup Championship} organized by the \textbf{MIST Robotics club} [\href{https://mist.ac.bd/department/cse/announcement/159/team_mist_blood_bank_champion_of_creative_app_contest_of_tri_robocup_organized_by_mist_robotics_club}{\underline{REF}}]}
+         
+        
+        \resumeItem{\textbf{3rd runner-up} at \textbf{COVID-19 Combatants Unification Competition}, organized by \textbf{IEEE Bangladesh Chapter} [\href{https://drive.google.com/file/d/1LT_F-guyWg8FymJV_-SkfvN2zSMIgKBa/view?usp=sharing}{\underline{REF}}]}
+
+% \href{https://drive.google.com/file/d/1vzAHdLtPQgW8uY1vK2QUrCbUdfOwiO42/view?usp=sharing}
+
+% https://drive.google.com/file/d/15FRjKlYTPpc7f4MiKO8ry2pez2X-cZ5P/view?usp=sharing
+
+        \resumeItem{\textbf{Top Downloaded Article Award} - in the year 2021, and 2022; provided by \textbf{Engineering Reports Journal - Wiley}}
+
+        \resumeItem{GGCS Summer Ph.D \textbf{Fellowship} - 2024, awarded by Graduate Group of Computer Science, UC Davis}
+
+        
+    \resumeItem{Recognized for academic excellence at MIST, achieving placement on the \textbf{Dean’s List of Honor} and receiving the \textbf{Merit Scholarship} in 2018, 2019, and 2020}
+            
+
+         
+    \resumeItemListEnd
+
+
+
+%-----------Publications-----------
+
+\section{Selected Publications \hfill \normalsize{\href{https://scholar.google.com/citations?user=UDxK99QAAAAJ&hl=en}{\textnormal{\underline{[Full List on Google Scholar]}}}}}
+
+
+\begin{enumerate}
+    \item \textbf{Nafiz Imtiaz Khan}, and Vladimir Filkov, “From Models to Practice: Enhancing OSS Project Sustainability with Evidence-Based Advice," in European Software Engineering Conference and Symposium on the Foundations of Software Engineering \textbf{(ESEC/FSE-2024)}. July 15-19, 2024, Porto de Galinhas, Brazil [\href{https://dl.acm.org/doi/abs/10.1145/3663529.3663777}{\underline{LINK}}]
+
+    \item \textbf{Nafiz Imtiaz Khan}, and Vladimir Filkov, “EvidenceBot: A Privacy-Preserving, Customizable RAG-Based Tool for Enhancing Large Language Model Interactions" in European Software Engineering Conference and Symposium on the Foundations of Software Engineering \textbf{(ESEC/FSE-2025)}. Mon 23 - Fri 27 June 2025 Trondheim, Norway [\href{https://dl.acm.org/doi/abs/10.1145/3696630.3728607}{\underline{LINK}}]
+
+
+    \item \textbf{Nafiz Imtiaz Khan}, Priyal Soni, Arjun Ashok, and Vladimir Filkov, “OSSPREY: AI-Driven Forecasting and Intervention for OSS Project Sustainability” in IEEE/ACM International Conference on Automated Software Engineering \textbf{(ASE-2025)} Tool Demonstration Track. Sun 16 – Thu 20 November 2025, Seoul, South Korea [\href{https://conf.researchr.org/details/ase-2025/ase-2025-tool-demonstration-track/27/OSSPREY-AI-Driven-Forecasting-and-Intervention-for-OSS-Project-Sustainability}{\underline{LINK}}]
+
+
+
+
+   \item \textbf{Nafiz Imtiaz Khan}, and Vladimir Filkov, Roger Eric Goldman, “AI-Driven Automation of Procedural Case Log Documentation" abstract presented at AMIA 2025 Clinical Informatics Conference [\href{https://amia.secure-platform.com/cic/gallery/rounds/82015/details/17117}{\underline{LINK}}]
+
+
+
+
+    \item \textbf{Nafiz Imtiaz Khan}, Vladimir Filkov, Kiley Cleland, Roger Eric Goldman, “Intelligent Documentation in Medical Education: Can AI Replace Manual Case Logging?" JAMIA Open [\href{https://doi.org/10.1093/jamiaopen/ooag067}{\underline{LINK}}]
+
+    \item Zeerak Babar, \textbf{Nafiz Imtiaz Khan}, Muhammad Hassanain, and Vladimir Filkov, ``Open-Source LLMs for Technical Q\&A: Lessons from StackExchange'', International Conference on Software Engineering of Emerging Technologies (SEET), 2025. [\href{https://link.springer.com/chapter/10.1007/978-3-032-08977-9_41}{\underline{LINK}}]
+
+
+    \item \textbf{Nafiz Imtiaz Khan}, and Vladimir Filkov, “Leveraging Language Models to Discover Evidence-Based Actions for OSS Sustainability" (Submitted) [\href{https://arxiv.org/abs/2602.11746}{\underline{LINK}}]
+
+    \item \textbf{Nafiz Imtiaz Khan}, Arjun Ashok, Swati Singhvi, Ștefan Stănciulescu, and Vladimir Filkov, “Multi-Ecosystem Modeling of OSS Project Sustainability" (Submitted) [\href{https://arxiv.org/abs/2602.17112}{\underline{LINK}}]
+    % [\href{}{\underline{HTML LINK}}]
+
+
+
+    
+
+    \item \textbf{Nafiz Imtiaz Khan}, Tahasin Mahmud, Muhammad Nazrul Islam, and Sumaiya Nuha Mustafina, “Prediction of Cesarean Childbirth using Ensemble Machine Learning Methods", 22nd International Conference on Information Integration and Web-based Applications \& Services (iiWAS2020), November 30-December 2, 2020, Chiang Mai, Thailand [\href{https://dl.acm.org/doi/10.1145/3428757.3429138}{\underline{LINK}}]
+
+    \item  \textbf{Nafiz Imtiaz Khan}, Muhammad Nazrul Islam, and Tahasin Mahmud, “COVID-19 and Black Fungus: Analysis of Public Perceptions through Machine Learning", Engineering Reports. 2022 Apr;4(4):e12475. \textbf{(IF = 2 and SJR Rank = Q2)}[\href{https://onlinelibrary.wiley.com/doi/10.1002/eng2.12475}{\underline{LINK}}]
+
+    \item Muhammad Nazrul Islam, Sumaiya Nuha Mustafina, Tahasin Mahmud, and \textbf{Nafiz Imtiaz Khan}, “Machine learning to predict pregnancy outcomes: a systematic review, synthesizing framework and future research agenda. BMC pregnancy and childbirth", 2022 Dec;22(1):1-9. \textbf{(IF = 3.09 and SJR Rank = Q1)}[\href{https://bmcpregnancychildbirth.biomedcentral.com/articles/10.1186/s12884-022-04594-2}{\underline{LINK}}]
+    
+
+    \item Jesika Rahman, Khondaker Sakil Ahmed, \textbf{Nafiz Imtiaz Khan}, Kamrul Islam, and Sujith Mangalathu, “Data-Driven Shear Strength Prediction of Steel Fiber Reinforced Concrete Beams Using Machine Learning Algorithms", Engineering Structures. 2021 Apr 15;233:111743.\textbf{(IF = 5.582 and SJR Rank = Q1)} [\href{https://www.sciencedirect.com/science/article/abs/pii/S0141029620343443}{\underline{LINK}}]
+
+
+
+
+    \item Samia Zakir Sarothi, Khondaker Sakil Ahmed, \textbf{Nafiz Imtiaz Khan}, Aziz Ahmed, and Moncef Nehdi, “Predicting Bearing Capacity of Double Shear Bolted Connections Using Machine Learning", Engineering Structures, 2022 Jan 15;251:113497.\textbf{(IF = 5.582 and SJR Rank = Q1)} [\href{https://www.sciencedirect.com/science/article/abs/pii/S014102962101600X"}{\underline{LINK}}]
+
+    \item Mohammad Shahjahan Majib, Md. Mahbubur Rahman, T. M. Shahriar Sazzad, \textbf{Nafiz Imtiaz Khan}, and Samrat Kumar Dey, “VGG-SCNet: A VGG Net-based Deep Learning Framework for Brain Tumor Detection on MRI Images", IEEE Access, vol. 9, pp. 1880-1892, 2021. \textbf{(IF = 3.367 and SJR Rank = Q1)} [\href{https://ieeexplore.ieee.org/document/9515947}{\underline{LINK}}]
+
+    \item Md Mahbubar Rahman, \textbf{Nafiz Imtiaz Khan}, Iqbal H. Sarker, Mohiuddin Ahmed, and Muhammad Nazrul Islam, “Leveraging machine learning to analyze sentiment from COVID‐19 tweets: A global perspective", Engineering Reports. 2022:e12572. \textbf{(IF = 2 and SJR Rank = Q2)} [\href{https://onlinelibrary.wiley.com/doi/full/10.1002/eng2.12572}{\underline{LINK}}]
+
+    \item Muhammad Nazrul Islam, \textbf{Nafiz Imtiaz Khan}, Ayon Roy, Md Mahbubar Rahman, Md Saddam Hossain Mukta, A.K.M Najmul Islam, “Sentiment Analysis of Bangladesh-specific COVID-19 Tweets using Deep Neural Network", 62nd International Conference on Information Technology and Management Science (ITMS'21), October 14-15, 2021, RIGA, LATVIA [\href{https://ieeexplore.ieee.org/document/9615331}{\underline{LINK}}]
+
+    % \item Deepon Deb Nath, \textbf{Nafiz Imtiaz Khan}, Jesmin Akhter and Abu Sayed Md. Mostafizur Rahaman, “Prediction of Android Malicious Software using boosting Algorithms", 4th International Conference on Emerging Technologies in Computing (iCETiC), August 18-19, 2021, London, United Kingdom [\href{https://LINK.springer.com/chapter/10.1007/978-3-030-90016-8_2?fbclid=IwAR1zpwvBxfsSL0-GbbWVtu9SCRuARConZ39zQYq55ffOD7-zILDDci00u-w}{\underline{LINK}}]
+
+    % \item Tarannum Zaki, \textbf{Nafiz Imtiaz Khan}, and Muhammad Nazrul Islam, “Evaluation of User's Emotional Experience through Neurological and Physiological Measures in Playing Serious Games", 20th International Conference on Intelligent Systems Design and Applications (ISDA), December 12-15, 2020, ONLINE. [\href{https://LINK.springer.com/chapter/10.1007%2F978-3-030-71187-0_96}{\underline{HTML LINK}}]
+
+
+
+
+
+
+
+    
+    
+
+    
+\end{enumerate}
+
+
+
+
+% \resumeSubHeadingListStart
+% \resumeProjectHeading
+
+
+
+   
+
+    
+% % {\textbf{Conference}$:$ \emph{}}{}
+
+% % \begin{enumerate}
+% %        \item Tarannum Zaki, \textbf{Nafiz Imtiaz Khan}, and Muhammad Nazrul Islam, “Evaluation of User's Emotional Experience through Neurological and Physiological Measures in Playing Serious Games", 20th International Conference on Intelligent Systems Design and Applications (ISDA), December 12-15, 2020, ONLINE. [\href{https://LINK.springer.com/chapter/10.1007%2F978-3-030-71187-0_96}{\underline{HTML LINK}}]
+
+% %     \item Anika Islam Aishwarja, Nusrat Jahan Eva, Shakira Mushtary, Zarin Tasnim, \textbf{Nafiz Imtiaz Khan}, and Muhammad Nazrul Islam, “Exploring the Machine Learning Algorithms to Find the Best Features for Predicting the Breast Cancer and its Recurrence", 3rd International Conference on Intelligent Computing and Optimization (ICO), April 22-23, 2021, Hua Hin, Thailand. [\href{https://LINK.springer.com/chapter/10.1007/978-3-030-68154-8_48}{\underline{HTML LINK}}]
+
+% %     \item Deepon Deb Nath,\textbf{ Nafiz Imtiaz Khan}, Jesmin Akhter and Abu Sayed Md. Mostafizur Rahaman, “Prediction of Android Malicious Software using boosting Algorithms", 4th International Conference on Emerging Technologies in Computing (iCETiC), August 18-19, 2021, London, United Kingdom. [\href{https://LINK.springer.com/chapter/10.1007/978-3-030-90016-8_2?fbclid=IwAR1zpwvBxfsSL0-GbbWVtu9SCRuARConZ39zQYq55ffOD7-zILDDci00u-w}{\underline{HTML LINK}}]
+
+
+% %      \item Md. Rokonuzzaman Reza, Fabiha Mukarrama Binte Mannan, Dhrubo Barua, Shafayetul Islam, \textbf{ Nafiz Imtiaz Khan}, and Sharifa Rania Mahmud, “Developing a Machine Learning Based Support System for Mitigating the Suppression Against Women and Children", 5th International Conference on Electrical Engineering and Information \& Communication Technology (ICEEICT), Nov 18-20, 2021, Dhaka, Bangladesh. [\href{https://ieeexplore.ieee.org/document/9667924/}{\underline{HTML LINK}}]
+
+% %     \item Shutonu Mitra, Tasfia Tasnim, Arr Rafi Islam, \textbf{Nafiz Imtiaz Khan}, and Shajahan Majib, “A Framework to Detect and Prevent Cyberbullying from Social Media by Exploring Machine Learning Algorithms", 6th International Conference on Computer, Communication, Chemical, Materials and Electronic Engineering (IC4ME2), December 26-27, 2021, Rajshahi University, Rajshahi, Bangladesh. [\href{https://ieeexplore.ieee.org/abstract/document/9768450}{\underline{HTML LINK}}]
+
+
+% %     \item Muhammad Rafsun Sheikh, Tarek Hasan Masud,\textbf{Nafiz Imtiaz Khan}, and Muhammad Nazrul Islam, “An Efficient Transfer Learning Model for Predicting Forged (Handwritten) Signature", In 2021 International Conference on Computer, Communication, Chemical, Materials, and Electronic Engineering (IC4ME2), December 26-27, 2021, Rajshahi University, Rajshahi, Bangladesh. [\href{https://ieeexplore.ieee.org/abstract/document/9768440}{\underline{HTML LINK}}]
+    
+
+% %     \item \textbf{Nafiz Imtiaz Khan}, Sumaiya Nuha Mustafina, Farzana Faruk Jhumu, A.H.M Zobyer, Masrur Hasan Mahin, Md. Ariful Islam Tarek, Raiyan Rahman, and Muhammad Nazrul Islam, “Towards Developing an Automated Attendance Management System using Fingerprint Sensor", International Conference on Emerging Technology in Computing, Communication and Electronics, December 21-22, 2020, Dhaka, Bangladesh. [\href{https://ieeexplore.ieee.org/document/9350882}{\underline{HTML LINK}}]
+
+% %     \item Noor Nafiz Islam, \textbf{Nafiz Imtiaz Khan}, Md Abdur Razzak, and Muhammad Nazrul Islam, “Design, Development, and Evaluation of a Physical Exercise Monitoring and Managing System for Athletes, 23rd International Conference on Information Integration and Web Intelligence (iiWAS2021), November 29-December 1, 2021, Linz, Austria. [\href{https://dl.acm.org/doi/abs/10.1145/3487664.3487725}{\underline{HTML LINK}}]
+
+    
+
+% %     \item Muhammad Nazrul Islam, \textbf{Nafiz Imtiaz Khan}, Ayon Roy, Md Mahbubar Rahman, Md Saddam Hossain Mukta, A.K.M Najmul Islam, “Sentiment Analysis of Bangladesh-specific COVID-19 Tweets using Deep Neural Network", 62nd International Conference on Information Technology and Management Science (ITMS'21), October 14-15, 2021, RIGA, LATVIA. [\href{https://ieeexplore.ieee.org/document/9615331}{\underline{HTML LINK}}]
+
+
+
+% %     \item Moumita Bhowmik, Naim Ibna Khadem Al Bhuyain, Md. Rokonuzzaman Reza, \textbf{Nafiz Imtiaz Khan}, and Muhammad Nazrul Islam, “Neurophysiological Feature Based Stress Classification Using Unsupervised Machine Learning Technique", In Proceedings of International Conference on Fourth Industrial Revolution and Beyond (IC4IR). December 2021, Dhaka, Bangladesh.
+% %     [\href{https://LINK.springer.com/chapter/10.1007/978-981-19-2445-3_42}{\underline{HTML LINK}}]
+
+% %     \item Ifath Ara, Tasneem Mubashshira, Fariha Fardina Amin, \textbf{Nafiz Imtiaz Khan,} and Muhammad Nazrul Islam, “Towards Developing a Mobile Application for Detecting Intoxicated People through Interactive UIs", International Joint Conference on Advances in Computational Intelligence (IJCACI), October 23–24, 2021, ONLINE.  [\href{https://LINK.springer.com/chapter/10.1007/978-981-19-0332-8_15}{\underline{HTML LINK}}]
+
+
+% %     \item Faria Habib, Tasfhia Fatema, Munswarim Khan, \textbf{Nafiz Imtiaz Khan}, and Muhammad Nazrul Islam, “Exploring Design Attributes and Development of an Acoustic VR Game to Improve Ethical Values of Visually Impaired People", In 2022 IEEE 7th International Conference for Convergence in Technology (I2CT), Apr 7, 2022, Mumbai, India.
+% %     [\href{https://ieeexplore.ieee.org/abstract/document/9824116}{\underline{HTML LINK}}]
+
+% %     \item Raiyan Jahangir, Md. Wasif-Ul-Islam, Nasif Shahriar Mohim, Anika Ashraf, \textbf{Nafiz Imtiaz Khan}, Muhammad Nazrul Islam, “Towards developing a voice-over-guided system for visually impaired people to learn writing the alphabets", in 25th International Conference on Computer and Information Technology (ICCIT), Dec 17-19, 2022, Cox's Bazar, Bangladesh.
+% %     [\href{https://ieeexplore.ieee.org/abstract/document/10055542}{\underline{HTML LINK}}]
+
+% %     \item Md. Muhtasim Fuad, B. M. Nishanul Alam Nishat, Mohian Islam, Tashfia Fatema, Faria Habib, Saba Ahmed Momo, Fahim Foysal, \textbf{Nafiz Imtiaz Khan}, Muhammad Nazrul Islam, “A Blockchain-based Framework to Develop a Sustainable Supply Chain Management System for Apparel Industry", in 9th International Women in Engineering (WIE) Conference on Electrical and Computer Engineering (WIECON-ECE), 25-26 Nov. 2023, Thiruvananthapuram, India. 
+% %     [\href{https://ieeexplore.ieee.org/abstract/document/10456466}{\underline{HTML LINK}}]
+
+
+    
+
+
+    
+
+    
+% % \end{enumerate}
+
+
+
+% \resumeProjectHeading
+% {\textbf{Journal}$:$ \emph{}}{}
+
+
+% \begin{enumerate}
+
+
+
+% \item Muhammad Nazrul Islam, Tahasin Mahmud,\textbf{ Nafiz Imtiaz Khan}, Sumaiya Nuha Mustafina, and A. K. M. Nazmul Islam, “Exploring Machine Learning Algorithms to Find the Best Features for Predicting Modes of Childbirth", IEEE Access, vol. 9, pp. 1680-1692, 2021. \textbf{(IF = 3.367 and SJR Rank = Q1)}[\href{https://ieeexplore.ieee.org/document/9296752}{\underline{HTML LINK}}]
+
+% \item Mohammad Shahjahan Majib, Md. Mahbubur Rahman, T. M. Shahriar Sazzad, \textbf{Nafiz Imtiaz Khan}, and Samrat Kumar Dey, “VGG-SCNet: A VGG Net-based Deep Learning Framework for Brain Tumor Detection on MRI Images", IEEE Access, vol. 9, pp. 1880-1892, 2021. \textbf{(IF = 3.367 and SJR Rank = Q1)}[\href{https://ieeexplore.ieee.org/document/9515947}{\underline{HTML LINK}}]
+
+% \item Jesika Rahman, Khondaker Sakil Ahmed, \textbf{Nafiz Imtiaz Khan}, Kamrul Islam, and Sujith Mangalathu, “Data-Driven Shear Strength Prediction of Steel Fiber Reinforced Concrete Beams Using Machine Learning Algorithms", Engineering Structures. 2021 Apr 15;233:111743.\textbf{(IF = 5.582 and SJR Rank = Q1)} [\href{https://www.sciencedirect.com/science/article/abs/pii/S0141029620343443}{\underline{HTML LINK}}]
+
+
+
+
+% \item Samia Zakir Sarothi, Khondaker Sakil Ahmed, \textbf{Nafiz Imtiaz Khan}, Aziz Ahmed, and Moncef Nehdi, “Predicting Bearing Capacity of Double Shear Bolted Connections Using Machine Learning", Engineering Structures, 2022 Jan 15;251:113497.\textbf{(IF = 5.582 and SJR Rank = Q1)}[\href{https://www.sciencedirect.com/science/article/abs/pii/S014102962101600X"}{\underline{HTML LINK}}]
+
+
+% \item Samia Zakir Sarothi, Khondaker Sakil Ahmed, \textbf{Nafiz Imtiaz Khan}, Aziz Ahmed, and Moncef Nehdi, “Machine Learning-Based Failure Mode Identification of Double Shear Bolted Connections in Structural Steel", Engineering Failure Analysis. 2022 May 23:106471. \textbf{(IF = 5.582 and SJR Rank = Q1)} [\href{https://www.sciencedirect.com/science/article/abs/pii/S1350630722004459}{\underline{HTML LINK}}]
+
+
+
+% \item Md Mahbubar Rahman,\textbf{ Nafiz Imtiaz Khan}, Iqbal H. Sarker, Mohiuddin Ahmed, and Muhammad Nazrul Islam, “Leveraging machine learning to analyze sentiment from COVID‐19 tweets: A global perspective", Engineering Reports. 2022:e12572. \textbf{(IF = 2 and SJR Rank = Q2) }[\href{https://onlinelibrary.wiley.com/doi/full/10.1002/eng2.12572}{\underline{HTML LINK}}]
+
+
+% \item Muhammad Nazrul Islam, Sumaiya Nuha Mustafina, Tahasin Mahmud, and \textbf{Nafiz Imtiaz Khan}, “Machine learning to predict pregnancy outcomes: a systematic review, synthesizing framework and future research agenda. BMC pregnancy and childbirth", 2022 Dec;22(1):1-9. \textbf{(IF = 3.09 and SJR Rank = Q1) }[\href{https://bmcpregnancychildbirth.biomedcentral.com/articles/10.1186/s12884-022-04594-2}{\underline{HTML LINK}}]
+
+
+% \item Akib Zaman, Mohammad Shahjahan Majib, Shoeb Ahmed Tanjim, Shah Md. Ahasan Siddique, Shafayetul Islam, Md Shadman Aadeeb, \textbf{Nafiz Imtiaz Khan}, Riasat Haque, Md Rashid Ul Islam, M. Rayhan Ferdous Faisal, Siddharth Malik, and Muhammad Nazrul Islam,  “UVC-PURGE: A Novel Cost-Effective Disinfection Robot for Combating COVID-19 Pandemic", IEEE Access. 2022 Mar 30;10:37613-34. \textbf{(IF = 3.367 and SJR Rank = Q1) } [\href{https://ieeexplore.ieee.org/abstract/document/9745041}{\underline{HTML LINK}}]
+
+
+
+% \item Muhammad Nazrul Islam and \textbf{Nafiz Imtiaz Khan}, Toki Tahmid Inan, “Designing User Interfaces for Illiterate and Semi-literate Users: A Systematic Review", SAGE Open. 2023 May;13(2):21582440231172741. \textbf{(IF = 2.032 and SJR Rank = Q2)} [\href{https://ieeexplore.ieee.org/abstract/document/9745041}{\underline{HTML LINK}}] 
+
+
+% \item Muhammad Nazrul Islam and \textbf{Nafiz Imtiaz Khan}, Toki Tahmid Inan, “A Multilingual Handwriting Learning System for Visually Impaired People", SAGE Open. 2023 May;13(2):21582440231172741. \textbf{(IF = 2.032 and SJR Rank = Q2)} [\href{https://ieeexplore.ieee.org/abstract/document/9745041}{\underline{HTML LINK}}] 
+
+% Muhammad Nazrul Islam, Raiyan Jahangir, Nasif Shahriar Mohim, Md. Wasif-ul-Islam, Anika Ashraf, \textbf{Nafiz Imtiaz Khan}, Mohammad Ratul Mahjabin, Abu Saleh Musa Miah, Jungpil Shin,  “A Multilingual Handwriting Learning System for Visually Impaired People," IEEE Access. 2024 Jan 15.
+
+% [\href{https://ieeexplore.ieee.org/abstract/document/10399807}{\underline{HTML LINK}}] 
+
+
+
+% \item Md Saddam Hossain Mukta, Akib Zaman, \textbf{Nafiz Imtiaz Khan}, Md. Adnanul Islam, Muhammad Nazrul Islam, Nafeez Zawad, and Mohammed Eunus Ali, “User Value based Group Recommendations from Tweets," Social Networks (Under Review)
+
+% \end{enumerate}
+
+% \resumeProjectHeading
+% {\textbf{Book Chapter}$:$ \emph{}}{}
+
+% \begin{enumerate}
+% \item Muhammad Nazrul Islam, Nafiz Imtiaz Khan, Nafiz Islam, Samuli Laato and A. K. M. Nazmul Islam. “Monitoring the Health and Movement of Quarantined COVID-19 Patients with Wearable Devices" Healthcare Technology Solutions for Pandemics - A Roadmap. [\href{https://LINK.springer.com/chapter/10.1007/978-3-031-10031-4_10}{\underline{HTML LINK}}]
+% \end{enumerate}
+
+
+% \resumeSubHeadingListEnd
+
+%-----------Activities-----------
+
+
+% \section{Professional \& Leadership Activities}
+
+
+% \resumeItemListStart
+%         % \resumeItem{Participated in Intra MIST Programming and Gaming Competition 2018.}
+        
+%         % \resumeItem{Participated in MIST CSE Fest Programming Contest 2018.}
+        
+%         %  \resumeItem{Participated in MIST Inter-University Programming Contest (IUPC) 2019.}
+
+%         \resumeItem{\textbf{Volunteer Co-Chair \& Session Chair}, 39th IEEE/ACM International Conference on Automated Software Engineering (\textbf{ASE 2024})}
+
+
+%         \resumeItem{\textbf{Reviewer}, CHI 2023, SAGE Open}
+
+
+%          \resumeItem{\textbf{Program Committee Member and Reviewer}, {CVR 2023}, {AIC 2022}}
+
+%          % \resumeItem{\textbf{Program Committee Member and Reviewer}, 2022 IEEE World Conference on Applied Intelligence and Computing (\textbf{AIC 2022})}
+
+
+%          \resumeItem{\textbf{Chief Technical Officer}, ICMAB 18th Council Election - 2022, BEPZA Recruitment Exam - 2022,  AFMC Admission Test - 2021 \& 2022}
+
+%          % \resumeItem{\textbf{Chief Technical Officer}, BEPZA Recruitment Exam - 2022.} 
+
+%          % \resumeItem{\textbf{Chief Technical Officer}, AFMC Admission Test - 2022.}
+
+%          % \resumeItem{\textbf{Chief Technical Officer}, AFMC Admission Test - 2021.}
+
+%          \resumeItem{\textbf{Event Coordinator}, Mobile App Contest, MIST Inter-University ICT Innovation Fest 2021.}
+
+%          \resumeItem{\textbf{Technical Member}, MIST Inter-University ICT Innovation Fest 2021.}
+
+%          \resumeItem{\textbf{\textbf{Executive Member}}, Event Management Team, MIST Computer Club.}
+         
+
+         
+
+         
+
+         
+
+         
+
+
+         
+
+
+         
+
+        
+
+        
+         
+         
+         
+         
+         % [\href{https://ict-innovation-fest-2021.mist.ac.bd/organizing_commmitte.html}{ref}]}
+         
+         
+         
+         % [\href{https://ict-innovation-fest-2021.mist.ac.bd/app_contest.html}{{ref}}]} 
+
+          % \resumeItem{\textbf{Event Coordinator}, Seminar on Blockchain and its Application.} 
+          % [\href{https://mist.ac.bd/department/cse/announcement/312/seminar_on_blockchain_and_its_application}{{ref}}]}
+          
+         
+         % [\href{https://mist.ac.bd/department/cse/announcement/346/department_of_cse_successfully_conducted_the_armed_forces_medical_college_afmc_admission_test_2021}{{ref}}]}
+
+        
+        
+        % [\href{  }{\underline{ref}]}}
+         
+         
+         % [\href{https://drive.google.com/file/d/1NSODwIgzhm1hnPqYTpmQ1EdAVm7xJp0t/view?usp=sharing}{\underline{ref}]}}
+
+        
+        % [\href{https://drive.google.com/file/d/1NSODwIgzhm1hnPqYTpmQ1EdAVm7xJp0t/view?usp=sharing}{\underline{ref}]}}
+         
+         
+         % [\href{https://drive.google.com/file/d/1W-kEYErSyFrSxOMtRBIft2CgeS749O3s/view?usp=sharing}{\underline{ref}]}} 
+
+       
+        % [\href{https://drive.google.com/file/d/1BpXk52nXHsqd5imE2TXB9fppCqPb5583/view?usp=sharing}{\underline{ref}]}} 
+         
+        
+        
+        % [\href{https://conf.researchr.org/profile/ase-2024/nafizimtiazkhan}{\underline{ref}]}}
+\resumeItemListEnd
+    
+    
+
+
+% [\href{https://drive.google.com/file/d/1TgQF_YMBEp11y4eV5xY8w3TJaRT0yBFB/view?usp=sharing}{\underline{ref}}]}
+
+% \input{08-Skills}
+% \input{03-Experience}
+
+% \input{04_Patents}
+% \input{05-Awards}
+% \input{06-Projects}
+
+
+% \input{04-Publication}
+
+% \input{07-Activities}
+
+% \input{09-References}
+
+\end{document}
+
+
+% \input{11-teaching_experience}
