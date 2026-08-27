@@ -33,6 +33,7 @@
 \usepackage{ifthen} % for conditional statements
 \usepackage{needspace} % for avoiding page brake right after the section title
 \usepackage{ragged2e}
+\usepackage[none]{hyphenat} % disable hyphenation so keywords don't split across lines in ATS text extraction
 \usepackage{iftex} % check if engine is pdflatex, xetex or luatex
 % \usepackage[colorlinks=true,urlcolor=NavyBlue]{hyperref}
 
@@ -231,26 +232,27 @@
 \newcommand{\resumeItemListStart}{\begin{itemize}}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
 
-\justifying
+\RaggedRight
+\sloppy
 
 \begin{document}
 
 % https://drive.google.com/file/d/1HN2YaIrYDx78LKAqxLuT1QUqvHvkP8EU/view?usp=sharing
 
 \begin{center}
-    \textbf{\Huge \scshape Nafiz Imtiaz Khan} \\ \vspace{1pt}
+    \textbf{\Huge Nafiz Imtiaz Khan} \\ \vspace{1pt}
     Davis, California, United States\\
      % \faMobile \small \hspace{0.00001mm} +88 017 95950319 $|$ 
      \hspace{0.00001mm}
-     \href{mailto:nikhan@ucdavis.edu}{\underline{nikhan@ucdavis.edu}} $|$ (+1)530-220-8037 $|$ \hspace{0.00001mm} \href{https://nafiz43.github.io/portfolio/}{\underline{nafiz43.github.io/}}  $|$ \hspace{0.00001mm} \href{https://www.linkedin.com/in/nafiz43/}{\underline{linkedin.com/in/nafiz43/}}  $|$ \hspace{0.00001mm} \href{https://github.com/Nafiz43}{\underline{github.com/Nafiz43}} 
+     \href{mailto:nikhan@ucdavis.edu}{\underline{nikhan@ucdavis.edu}} $|$ +1 530-220-8037 $|$ \hspace{0.00001mm} \href{https://nafiz43.github.io/portfolio/}{\underline{nafiz43.github.io/}}  $|$ \hspace{0.00001mm} \href{https://www.linkedin.com/in/nafiz43/}{\underline{linkedin.com/in/nafiz43/}}  $|$ \hspace{0.00001mm} \href{https://github.com/Nafiz43}{\underline{github.com/Nafiz43}} 
 
 
 \end{center}
 
 %-----------EDUCATION-----------
 
-\section{Career Objective}
-I am a PhD candidate in Computer Science at UC Davis, advised by Professor Vladimir Filkov. My research focuses on open-source software sustainability, health informatics, and applied data science. I specialize in fine-tuning deep neural networks, large language models, building agentic retrieval-augmented generation (RAG) systems, and developing task-specific AI/ML pipelines.
+\section{Summary}
+PhD candidate in Computer Science at UC Davis, advised by Professor Vladimir Filkov. Research focuses on open-source software sustainability, health informatics, and applied data science. Specializes in fine-tuning deep neural networks and large language models, building agentic retrieval-augmented generation (RAG) systems, and developing task-specific AI/ML pipelines.
 
 
 
@@ -259,11 +261,18 @@ I am a PhD candidate in Computer Science at UC Davis, advised by Professor Vladi
   \resumeSubHeadingListStart
 
     \resumeSubheading
-      {University of California, Davis} {September 2023 - Present}
+      {University of California, Davis} {September 2023 -- Present}
       {PhD in Computer Science | MSc in Computer Science (2025)}
       {California, United States}
       
     Master's degree conferred July 2025, CGPA: 3.91/4.00
+
+    \resumeSubheading
+      {Military Institute of Science and Technology (MIST)} {% TODO: fill start--end dates, e.g. January 2016 -- February 2020
+      }
+      {B.Sc. in Computer Science and Engineering}
+      {Dhaka, Bangladesh}
+      % TODO: add CGPA if you want to state it, e.g. "CGPA: X.XX/4.00"
 
 \resumeSubHeadingListEnd
 
@@ -272,8 +281,9 @@ I am a PhD candidate in Computer Science at UC Davis, advised by Professor Vladi
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.15in, label={}]
     \small{\item{
-     \textbf{Programming Languages}{: Python, C/C++, Java, JavaScript, PL/SQL, Typescript, HTML / CSS, Bash} \\
-     \textbf{Frameworks/Libraries} {: PyTorch, Keras, Tensorflow, LangChain, Scikit-learn, Pandas, NumPy, Matplotlib, BeautifulSoup, Pyvis, Node, React} \\
+     \textbf{Programming Languages}{: Python, SQL, C/C++, Java, JavaScript, PL/SQL, Typescript, HTML / CSS, Bash} \\
+     \textbf{Frameworks/Libraries} {: PyTorch, Keras, Tensorflow, Hugging Face Transformers, LangChain, Scikit-learn, Pandas, NumPy, Matplotlib, BeautifulSoup, Pyvis, Node, React} \\
+     \textbf{ML/AI Techniques}{: Transformer architectures, fine-tuning, PEFT, LoRA/QLoRA, multimodal \& vision-language models (VLMs), retrieval-augmented generation (RAG), benchmarking \& evaluation}\\
      \textbf{Tools/Platform}{: Ollama, Flask, Git, AWS Bedrock, Google Colab, GCP, Docker, Kubernetes, Grafana, Selenium, Tableau, Microsoft Azure, JIRA}\\
      \textbf{Database}{: ChromaDB, FAISS, MongoDB, FireBase, MySQL, Oracle, SQLite, Neo4j}
     %  \textbf{Scripting \& Modeling}{: LATEX, HTML, JavaScript, Shell Script, UML} \\
@@ -298,7 +308,7 @@ I am a PhD candidate in Computer Science at UC Davis, advised by Professor Vladi
 
 
 \resumeSubheading
-  {Artificial Intelligence Intern}{June 2026 - Present}
+  {Artificial Intelligence Intern}{June 2026 -- Present}
   {BetterHelp} {San Jose, California, United States (Remote)}
   \resumeItemListStart
     % TODO: replace with an accurate description of your BetterHelp AI Intern work
@@ -306,7 +316,7 @@ I am a PhD candidate in Computer Science at UC Davis, advised by Professor Vladi
   \resumeItemListEnd
 
 \resumeSubheading
-  {Human Frontier Collective Specialist – GenAI (Internship)}{Aug 2025 – Sep 2025}
+  {Human Frontier Collective Specialist -- GenAI (Internship)}{August 2025 -- September 2025}
   {Scale AI, Inc.}{Remote – California, United States}
   \resumeItemListStart
     \resumeItem{Designed and critiqued complex, domain-specific problem sets to rigorously test cutting-edge generative AI models, identifying limitations and refining performance.}
@@ -325,34 +335,34 @@ I am a PhD candidate in Computer Science at UC Davis, advised by Professor Vladi
 
 
   \resumeSubheading
-      {Graduate Student Researcher}{September 2023 - Present}
+      {Graduate Student Researcher}{September 2023 -- Present}
       {University of California, Davis} {California, United States}
 
       \resumeItemListStart
 
-    \resumeItem{Developed \textbf{AngioVision} (\href{https://github.com/Nafiz43/AngioVision}{\underline{https://github.com/Nafiz43/AngioVision}}), an LLM-powered angiography report generation and validation pipeline; fine-tuned a framework integrating a \textbf{CLIP} alignment module, embedding, and decoder layers, achieving a \textbf{10\% F1 gain} over the prior SOTA, \textbf{Claude 4.6}.}
+    \resumeItem{Built \textbf{AngioVision} (\href{https://github.com/Nafiz43/AngioVision}{\underline{https://github.com/Nafiz43/AngioVision}}), a multimodal \textbf{large language model (LLM)} pipeline for angiography report generation and validation; fine-tuned a \textbf{vision-language} framework integrating a \textbf{CLIP} alignment module, embedding, and decoder layers, achieving a \textbf{10\% F1 gain} over the prior SOTA, \textbf{Claude 4.6}.}
 
 
-    \resumeItem{Led the end-to-end development of RepoWise (\href{https://repowise.github.io/RepoWise-website/}{\underline{https://repowise.github.io/RepoWise-website/}}), a domain-aware RAG system for OSS governance analytics; demonstrated 84\% accuracy on factual queries and superior performance over general-purpose LLMs (GPT-4o, Claude 4.5 Sonnet) in both factual and non-factual repository tasks.}
-    
-    \resumeItem{Spearheaded the development of the \textbf{OSSPREY} (https://oss-prey.github.io/OSSPREY-Website/) tool to assess the health of open-source projects, as measured by real-time analytics generation with an average \texttt{latency} of 3.5s and 124MB \texttt{memory usage} per project, by integrating \textbf{Vue.js} (frontend), \textbf{TensorFlow} (deep learning), and \textbf{LangChain} \& \textbf{Ollama} (LLM inference pipeline design)}
-    
-    
-    \resumeItem{Developed \textbf{ReACT-GPT}(\href{https://github.com/Nafiz43/ReACT-GPT}{\underline{https://github.com/Nafiz43/ReACT-GPT}}), an \textbf{LLM}-and-\textbf{RAG}-powered framework for extracting actionable insights from scientific articles, achieving a 75\% \texttt{BERTScore}, by integrating \textbf{LangChain} (orchestration), \textbf{ChromaDB} (retrieval), and \textbf{Ollama} (lightweight LLM inference)} 
+    \resumeItem{Led the end-to-end development of \textbf{RepoWise} (\href{https://repowise.github.io/RepoWise-website/}{\underline{https://repowise.github.io/RepoWise-website/}}), a domain-aware \textbf{retrieval-augmented generation (RAG)} system for OSS governance analytics; benchmarked and demonstrated 84\% accuracy on factual queries, outperforming general-purpose LLMs (\textbf{GPT-4o}, \textbf{Claude 4.5 Sonnet}) on both factual and non-factual repository-analysis tasks.}
 
-    \resumeItem{Developed \textbf{EvidenceBot} (https://nafiz43.github.io/EvidenceBot/), a privacy-preserving \textbf{RAG} tool for querying and extracting insights from a diverse set of documents, built using \textbf{Streamlit} and powered by the \textbf{ReACT-GPT} framework}
+    \resumeItem{Spearheaded the development of \textbf{OSSPREY} (https://oss-prey.github.io/OSSPREY-Website/), a tool to assess open-source project health via real-time analytics with an average \texttt{latency} of 3.5s and 124MB \texttt{memory usage} per project, integrating \textbf{Vue.js} (frontend), \textbf{TensorFlow} (deep learning), and \textbf{LangChain} \& \textbf{Ollama} (LLM inference pipeline design)}
 
 
+    \resumeItem{Engineered \textbf{ReACT-GPT} (\href{https://github.com/Nafiz43/ReACT-GPT}{\underline{https://github.com/Nafiz43/ReACT-GPT}}), an \textbf{LLM}-and-\textbf{RAG}-powered framework for extracting actionable insights from scientific articles, achieving a 75\% \texttt{BERTScore} by integrating \textbf{LangChain} (orchestration), \textbf{ChromaDB} (vector retrieval), and \textbf{Ollama} (lightweight LLM inference)}
 
-    \resumeItem{Developed \textbf{PCL-Fetcher} ([\href{https://nafiz43.github.io/PCL-Fetcher/}{\underline{https://nafiz43.github.io/PCL-Fetcher/}}), an LLM-powered pipeline that automates procedural case log documentation from radiology reports, achieving an 86\% \texttt{F1Score}—exceeding the crosswalk benchmark by over 13\%}
-
-    \resumeItem{Developed \textbf{MammoGen-RAG} ([\href{https://github.com/Nafiz43/MammoGen-RAG}{\underline{https://github.com/Nafiz43/MammoGen-RAG}}]), a multi-modal RAG pipeline that leverages Vision-Language Models (VLMs) to automate mammography report generation, achieving a 90\% \texttt{F1score} through integrated visual and textual reasoning}
+    \resumeItem{Built \textbf{EvidenceBot} (https://nafiz43.github.io/EvidenceBot/), a privacy-preserving \textbf{RAG} tool for querying and extracting insights from a diverse set of documents, using \textbf{Streamlit} and the \textbf{ReACT-GPT} framework}
 
 
-     
-    \resumeItem{Enhanced the performance of foundational language models in \textbf{LLM-as-Developers}(\href{https://github.com/zeerakb1/llm-developers-evaluation}{\underline{https://github.com/zeerakb1/llm-developers-evaluation}}) project by 10\% (\texttt{BERTScore}) on answering StackOverflow questions through strategic fine-tuning techniques (\textbf{PEFT} and \textbf{QLoRA})}
-    
-    \resumeItem{Developed and optimized \textbf{Transformer} and \textbf{LSTM-based} models for forecasting the sustainability of Open Source Software (OSS) projects (\href{https://github.com/OSS-PREY/OSSPREY-Pex-Forecaster}{\underline{https://github.com/OSS-PREY/OSSPREY-Pex-Forecaster}}), achieving an 8\% improvement in \texttt{F1Score} over SOTA}
+
+    \resumeItem{Created \textbf{PCL-Fetcher} (\href{https://nafiz43.github.io/PCL-Fetcher/}{\underline{https://nafiz43.github.io/PCL-Fetcher/}}), an LLM-powered pipeline automating procedural case log documentation from radiology reports, achieving an 86\% \texttt{F1 score}—exceeding the crosswalk benchmark by over 13\%}
+
+    \resumeItem{Designed \textbf{MammoGen-RAG} (\href{https://github.com/Nafiz43/MammoGen-RAG}{\underline{https://github.com/Nafiz43/MammoGen-RAG}}), a multimodal RAG pipeline leveraging \textbf{vision-language models (VLMs)} to automate mammography report generation, achieving a 90\% \texttt{F1 score} through integrated visual and textual reasoning}
+
+
+
+    \resumeItem{Improved foundational language model performance in \textbf{LLM-as-Developers} (\href{https://github.com/zeerakb1/llm-developers-evaluation}{\underline{https://github.com/zeerakb1/llm-developers-evaluation}}) by 10\% (\texttt{BERTScore}) on answering StackOverflow questions via \textbf{parameter-efficient fine-tuning (PEFT)} and \textbf{QLoRA}}
+
+    \resumeItem{Developed and optimized \textbf{Transformer}- and \textbf{LSTM}-based models for forecasting Open Source Software (OSS) project sustainability (\href{https://github.com/OSS-PREY/OSSPREY-Pex-Forecaster}{\underline{https://github.com/OSS-PREY/OSSPREY-Pex-Forecaster}}), achieving an 8\% improvement in \texttt{F1 score} over SOTA}
 
     % \resumeItem{Developed \href{https://nafiz43.github.io/ReACTive/feature.html\#section1}{{ReACTive}}, a visualization tool for ReACTs (Researched ACTionables) with \textbf{Pyvis} and \textbf{Bootstrap}}
 
@@ -386,8 +396,8 @@ I am a PhD candidate in Computer Science at UC Davis, advised by Professor Vladi
       {Software Engineer}{July 2022 -- August 2023}
       {Center for Advanced Computing Research (CACR)}{Dhaka, Bangladesh}
     \resumeItemListStart
-        \resumeItem{Developed the \textbf{AFMC Admission Test} Module, a software solution for the AFMC Entrance exam, utilizing \textbf{Node.js}, \textbf{Bootstrap}, and \textbf{MongoDB} to generate unique randomized questions for 30,000 candidates and automate the evaluation and ranking process}
-        \resumeItem{Spearheaded a team to develop \textbf{C-Archive} using \textbf{PHP}, \textbf{MySQL}, and \textbf{Bootstrap} to store ongoing events of the department [\href{https://github.com/nurshatfateh/CSE_Archive_New}{\underline{GITHUB}}]}
+        \resumeItem{Built the \textbf{AFMC Admission Test} Module, a full-stack software solution for the AFMC Entrance exam, utilizing \textbf{Node.js}, \textbf{Bootstrap}, and \textbf{MongoDB} to generate unique randomized questions for 30,000 candidates and automate the evaluation and ranking process}
+        \resumeItem{Spearheaded a team to develop \textbf{C-Archive} using \textbf{PHP}, \textbf{MySQL}, \textbf{SQL}, and \textbf{Bootstrap} to store ongoing events of the department [\href{https://github.com/nurshatfateh/CSE_Archive_New}{\underline{GITHUB}}]}
         % \resumeItem{Developed a \textbf{Digital Plot Distribution} system in collaboration with \href{https://rajuk.gov.bd/}{{RAZUK}}, utilizing \textbf{Node.js}, \textbf{Bootstrap}, and \textbf{MongoDB}.}
         % \resumeItem{Developed the \textbf{Website} of \href{https://nafiz43.github.io/ICT-Innovation-Fest/}{{MIST Inter-University ICT Innovation Fest}} with \textbf{HTML}, \textbf{CSS}. and \textbf{Bootstrap}.}
 
@@ -434,7 +444,7 @@ I am a PhD candidate in Computer Science at UC Davis, advised by Professor Vladi
 
 \section{Award \& Honors}
     \resumeItemListStart
-         \resumeItem{\textbf{Champion} in the the \textbf{Medical Robotics Challenge for Contagious Diseases}, organized by \textbf{Imperial College London} [\href{https://mist.ac.bd/department/cse/announcement/193/team_uvc_purge_conquered_international_medical_robotics_challege}{\underline{REF}}]}
+         \resumeItem{\textbf{Champion} in the \textbf{Medical Robotics Challenge for Contagious Diseases}, organized by \textbf{Imperial College London} [\href{https://mist.ac.bd/department/cse/announcement/193/team_uvc_purge_conquered_international_medical_robotics_challege}{\underline{REF}}]}
          
          
          
