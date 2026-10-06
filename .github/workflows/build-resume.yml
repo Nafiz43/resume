@@ -6,6 +6,8 @@ on:
     paths-ignore:
       - "Nafiz_Imtiaz_Khan_Resume.pdf"
   workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * *"   # daily, 1 hour after the portfolio's ORCID sync
 
 concurrency:
   group: build-resume
@@ -21,13 +23,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Publications come from the website's ORCID-synced list (Nafiz43/portfolio).
+      - name: Regenerate publications.tex
+        id: pubs
+        run: |
+          python3 tools/pubs_to_tex.py
+          if git diff --quiet -- publications.tex; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+
+      # On the daily schedule, only rebuild when the publication list actually changed.
       - name: Compile LaTeX
+        if: github.event_name != 'schedule' || steps.pubs.outputs.changed == 'true'
         uses: xu-cheng/latex-action@v3
         with:
           root_file: 01-main.tex
           latexmk_use_xelatex: false
 
       - name: Rename compiled PDF
+        if: github.event_name != 'schedule' || steps.pubs.outputs.changed == 'true'
         run: mv -f 01-main.pdf Nafiz_Imtiaz_Khan_Resume.pdf
 
       - name: Commit compiled PDF
@@ -35,7 +47,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: rebuild resume PDF [skip ci]"
-          file_pattern: Nafiz_Imtiaz_Khan_Resume.pdf
+          file_pattern: Nafiz_Imtiaz_Khan_Resume.pdf publications.tex
 
       - name: Purge jsDelivr CDN cache
         if: steps.commit.outputs.changes_detected == 'true'
