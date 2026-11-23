@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Small local model rates each paper's relevance to the rest of the resume (no API key).
       - name: Start Ollama
@@ -43,12 +43,16 @@ jobs:
 
       - name: Commit compiled PDF
         id: commit
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: rebuild resume PDF [skip ci]"
           file_pattern: Nafiz_Imtiaz_Khan_Resume.pdf publications.tex
 
       - name: Purge jsDelivr CDN cache
         if: steps.commit.outputs.changes_detected == 'true'
+        # jsDelivr can still resolve @main to the old commit just after the push and cache the old PDF
+        # for up to 12 hours, so purge again after 90 seconds.
         run: |
+          curl -fsSL "https://purge.jsdelivr.net/gh/Nafiz43/resume@main/Nafiz_Imtiaz_Khan_Resume.pdf"
+          sleep 90
           curl -fsSL "https://purge.jsdelivr.net/gh/Nafiz43/resume@main/Nafiz_Imtiaz_Khan_Resume.pdf"
