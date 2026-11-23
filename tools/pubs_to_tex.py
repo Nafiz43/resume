@@ -91,11 +91,18 @@ def score(p, rel, year=datetime.date.today().year):
 
 
 def rank(pubs):
-    scored = [(score(p, rel), p) for p, rel in zip(pubs, relevance(pubs))]
-    scored.sort(key=lambda t: t[0], reverse=True)
-    for sc, p in scored:
-        print(f"{sc:.2f}  {p['year']:>4}  {p['title'][:70]}")
-    return [p for _, p in scored]
+    """Pinned papers ("resume_pin": true in publications.manual.json) rank first, so fit() never drops them."""
+    for p, rel in zip(pubs, relevance(pubs)):
+        p["_score"] = score(p, rel)
+    pubs = sorted(pubs, key=lambda p: (bool(p.get("resume_pin")), p["_score"]), reverse=True)
+    for p in pubs:
+        print(f"{p['_score']:.2f}  {p['year']:>4}  {'PIN ' if p.get('resume_pin') else ''}{p['title'][:70]}")
+    return pubs
+
+
+def display_order(pubs):
+    """Kept papers in plain score order, so a pin keeps a paper without moving it to the top."""
+    return sorted(pubs, key=lambda p: p.get("_score", 0), reverse=True)
 
 
 def pages():
@@ -127,6 +134,10 @@ def demo():
     assert r"\textbf{N K}" in out and r"Q\&A 100\%" in out and r"\textbf{(Best Paper Award)}" in out and r"a\%20b" in out, out
     assert first_author({"authors": "<b>N K</b>, B"}) and first_author({"authors": "A*, <b>N K</b>*"})
     assert not first_author({"authors": "A, <b>N K</b>"})
+    old = {"authors": "A, <b>N</b>", "year": "2000", "title": "old", "resume_pin": True, "_score": 0.1}
+    new = {"authors": "<b>N</b>", "year": "2026", "title": "new", "_score": 0.9}
+    assert sorted([new, old], key=lambda p: (bool(p.get("resume_pin")), p["_score"]), reverse=True)[0] is old
+    assert display_order([old, new])[0] is new
     assert score({"authors": "<b>N</b>", "year": "2026"}, 1, 2026) > score({"authors": "A, <b>N</b>", "year": "2020"}, 1, 2026)
 
 
@@ -136,5 +147,6 @@ if __name__ == "__main__":
     pubs = rank(pubs)
     if os.environ.get("LATEX_CMD"):
         pubs = fit(pubs)
+    pubs = display_order(pubs)
     OUT.write_text(render(pubs))
     print(f"wrote {OUT.name}: {len(pubs)} publications")
