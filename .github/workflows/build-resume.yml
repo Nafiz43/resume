@@ -50,9 +50,14 @@ jobs:
 
       - name: Purge jsDelivr CDN cache
         if: steps.commit.outputs.changes_detected == 'true'
-        # jsDelivr can still resolve @main to the old commit just after the push and cache the old PDF
-        # for up to 12 hours, so purge again after 90 seconds.
+        # jsDelivr resolves @main to the new commit only some minutes after the push, and a purge before
+        # that caches the OLD PDF for up to 12 hours. So purge and check until the CDN serves this build's PDF.
         run: |
-          curl -fsSL "https://purge.jsdelivr.net/gh/Nafiz43/resume@main/Nafiz_Imtiaz_Khan_Resume.pdf"
-          sleep 90
-          curl -fsSL "https://purge.jsdelivr.net/gh/Nafiz43/resume@main/Nafiz_Imtiaz_Khan_Resume.pdf"
+          URL="gh/Nafiz43/resume@main/Nafiz_Imtiaz_Khan_Resume.pdf"
+          for i in $(seq 20); do
+            curl -fsS "https://purge.jsdelivr.net/$URL" -o /dev/null || true
+            sleep 45
+            curl -fsSL "https://cdn.jsdelivr.net/$URL" -o /tmp/cdn.pdf || true
+            if cmp -s /tmp/cdn.pdf Nafiz_Imtiaz_Khan_Resume.pdf; then echo "CDN updated after try $i"; exit 0; fi
+          done
+          echo "::warning::jsDelivr still serves an old resume after 15 minutes; purge again by hand"
