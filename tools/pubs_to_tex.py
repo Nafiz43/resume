@@ -169,6 +169,7 @@ if __name__ == "__main__":
     demo()
     write_scholar()
     pubs = load(sys.argv[1] if len(sys.argv) > 1 else SRC)
+    pubs = [p for p in pubs if not p.get("resume_exclude")]  # "resume_exclude": true in publications.manual.json
     pubs = rank(pubs)
     if os.environ.get("LATEX_CMD"):
         pubs = fit(pubs)
