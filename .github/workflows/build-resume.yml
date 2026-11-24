@@ -46,7 +46,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: rebuild resume PDF [skip ci]"
-          file_pattern: Nafiz_Imtiaz_Khan_Resume.pdf publications.tex
+          file_pattern: Nafiz_Imtiaz_Khan_Resume.pdf publications.tex scholar.tex
 
       - name: Purge jsDelivr CDN cache
         if: steps.commit.outputs.changes_detected == 'true'
